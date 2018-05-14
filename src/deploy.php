@@ -84,6 +84,8 @@ function accept_deploy ($server, $request_body) {
   // Return success response
   echo json_encode(array(
     'status' => 'success',
+    'repo' => $repo,
+    'branch' => $branch,
   ));
 }
 ?>
