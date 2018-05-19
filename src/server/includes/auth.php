@@ -1,16 +1,16 @@
 <?php
 function auth ($body) {
-	if (!isset($body['user'])) {
-    show_error("Unable to use backdoor: User not specified");
+	if (!isset($body['repo'])) {
+    show_error("Repo not specified");
   }
 	if (!isset($body['timeout'])) {
-    show_error("Unable to use backdoor: Timeout not specified");
+    show_error("Timeout not specified");
   }
 	if (!isset($body['signature'])) {
-    show_error("Unable to use backdoor: Signature not specified");
+    show_error("Signature not specified");
   }
 	if ($body['timeout'] < time()) {
-    show_error("Unable to use backdoor: Signature has timed out");
+    show_error("Signature has expired");
   }
 
 	$hash = $body['repo'] . '|' . $body['user'] . '|' . $body['timeout'];
@@ -23,10 +23,12 @@ function auth ($body) {
 
 		$key = openssl_get_publickey(file_get_contents("$dir/$file"));
 		$ret = openssl_verify($hash, $signature, $key);
+
 		if ($ret == 1) {
 			return true;
 		}
-
-    return false;
 	}
+
+  return false;
+}
 ?>
