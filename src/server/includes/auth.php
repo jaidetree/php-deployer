@@ -13,7 +13,7 @@ function auth ($body) {
     show_error("Signature has expired");
   }
 
-	$hash = $body['repo'] . '|' . $body['user'] . '|' . $body['timeout'];
+	$hash = $body['repo'] . '|' . $body['branch'] . '|' . $body['timeout'];
 	$signature = base64_decode($body['signature']);
 
 	$dir = dirname(__FILE__) . '../resources/pubkeys';

@@ -1,0 +1,3 @@
+.cpcache
+**/*.secret.*
+.nrepl-port
