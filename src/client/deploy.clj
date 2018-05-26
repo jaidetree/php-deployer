@@ -43,23 +43,28 @@
      :hash hash
      :signature (sign hash private-key)}))
 
-(defn deploy
+(defn request-deploy!
   [body server-url]
   (client/post server-url {:form-params body
                            :content-type :json}))
 
-(defn get-private-key
+(defn get-private-key!
   [filename]
   (->> filename
        (pem/read)
        (pem/private-key)))
 
-(defn -main
-  [server-url private-key & {:as args}]
+(defn deploy
+  [server-url private-key {:as args}]
   (clojure.pprint/pprint [server-url private-key args])
   (-> args
-      keywordize-keys
-      (assoc :private-key (get-private-key private-key))
+      (assoc :private-key (get-private-key! private-key))
       (create-post-body)
       (clojure.pprint/pprint)
-      (deploy server-url)))
+      (request-deploy! server-url)))
+
+(defn -main
+  [server-url private-key & {:as args}]
+  (->> args
+       keywordize-keys
+       (deploy server-url private-key)))
