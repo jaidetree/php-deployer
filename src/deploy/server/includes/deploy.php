@@ -33,10 +33,6 @@ function decode_json_body ($server, $request_body) {
   return $body;
 }
 
-
-	throw new Exception("Unable to use backdoor: Signature could not be verified.");
-}
-
 function accept_deploy ($server, $request_body) {
   $body = decode_json_body($server, $request_body);
 

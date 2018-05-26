@@ -2,7 +2,8 @@
   (:require [clj-http.client :as client]
             [clojure.string :refer [join]]
             [clojure.walk :refer [keywordize-keys]]
-            [pem-reader.core :as pem])
+            [pem-reader.core :as pem]
+            [clojure.pprint :refer [pprint]])
   (:import [java.security SecureRandom Signature]
            [java.util Base64]))
 
@@ -45,8 +46,9 @@
 
 (defn request-deploy!
   [body server-url]
-  (client/post server-url {:form-params body
-                           :content-type :json}))
+  (pprint (:body
+            (client/post server-url {:form-params body
+                                     :content-type :json}))))
 
 (defn get-private-key!
   [filename]
