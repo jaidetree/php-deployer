@@ -4,7 +4,8 @@
             [clojure.walk :refer [keywordize-keys]]
             [pem-reader.core :as pem]
             [clojure.pprint :refer [pprint]])
-  (:import [java.security SecureRandom Signature]
+  (:import [java.security KeyFactory SecureRandom Signature]
+           [java.security.spec PKCS8EncodedKeySpec]
            [java.util Base64]))
 
 (defn decode64 [str]
@@ -46,23 +47,36 @@
 
 (defn request-deploy!
   [body server-url]
-  (pprint (:body
+  (print (:body
             (client/post server-url {:form-params body
-                                     :content-type :json}))))
+                                     :content-type :json
+                                     :accept :json}))))
+                                     ; :as :json}))))
+
+; KeyFactory kf = KeyFactory.getInstance("RSA");
+; Read privateKeyDerByteArray from DER file.
+; KeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyDerByteArray);
+; PrivateKey key = kf.generatePrivate(keySpec);
+
+(defn str->private-key
+  [key-file]
+  (let [kf (KeyFactory/getInstance "RSA")
+        key-spec (PKCS8EncodedKeySpec. (.getBytes key-file))]
+    (.generatePrivate kf key-spec)))
 
 (defn get-private-key!
   [filename]
   (->> filename
+       ; (slurp)
        (pem/read)
        (pem/private-key)))
 
 (defn deploy
   [server-url private-key {:as args}]
-  (clojure.pprint/pprint [server-url private-key args])
   (-> args
       (assoc :private-key (get-private-key! private-key))
       (create-post-body)
-      (clojure.pprint/pprint)
+      (doto pprint)
       (request-deploy! server-url)))
 
 (defn -main

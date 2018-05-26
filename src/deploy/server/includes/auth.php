@@ -18,11 +18,15 @@ function auth ($body, $config) {
 
 	$dir = $config['KEY_DIR'];
 
+  echo "\n\nHASH: " . $hash . "\n";
+
 	foreach (scandir($dir) as $file) {
 		if (!is_file("$dir/$file")) continue;
-
-		$key = openssl_get_publickey(file_get_contents("$dir/$file"));
+    $key_contents = file_get_contents("$dir/$file");
+		$key = openssl_get_publickey($key_contents);
 		$ret = openssl_verify($hash, $signature, $key);
+
+    echo "\n\nIS AUTHORIZED: " . $ret . "\n\n";
 
 		if ($ret == 1) {
 			return true;
