@@ -1,4 +1,4 @@
-(ns client.deploy
+(ns deploy.client.core
   (:require [clj-http.client :as client]
             [clojure.string :refer [join]]
             [clojure.walk :refer [keywordize-keys]]
