@@ -1,0 +1,4 @@
+{:deps
+  {clj-http {:mvn/version "3.9.0"}
+   cheshire {:mvn/version "5.8.0"}
+   xsc/pem-reader {:mvn/version "0.1.1"}}}
