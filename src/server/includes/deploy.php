@@ -1,4 +1,5 @@
 <?php
+include "../config.secret.php";
 include "show_error.php";
 
 include "auth.php";
@@ -39,7 +40,7 @@ function decode_json_body ($server, $request_body) {
 function accept_deploy ($server, $request_body) {
   $body = decode_json_body($server, $request_body);
 
-  if (!auth($body)) {
+  if (!auth($body, $CONFIG)) {
     header("HTTP/1.0 400 Bad Request");
     show_error('Access denied.');
   }

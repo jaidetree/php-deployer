@@ -1,5 +1,5 @@
 <?php
-function auth ($body) {
+function auth ($body, $config) {
 	if (!isset($body['repo'])) {
     show_error("Repo not specified");
   }
@@ -16,7 +16,7 @@ function auth ($body) {
 	$hash = $body['repo'] . '|' . $body['branch'] . '|' . $body['timeout'];
 	$signature = base64_decode($body['signature']);
 
-	$dir = dirname(__FILE__) . '../resources/pubkeys';
+	$dir = $config['KEY_DIR'];
 
 	foreach (scandir($dir) as $file) {
 		if (!is_file("$dir/$file")) continue;
