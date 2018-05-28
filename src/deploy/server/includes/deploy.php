@@ -25,27 +25,36 @@ function accept_deploy ($server, $request_body, $config) {
     show_error('Received a destination directory outside the dev sandbox.');
   }
 
+  $temp_file = "repos/temp_" . str_replace("/", "_", $repo) . ".zip";
+
   // Download source repo zip
-  file_put_contents("temp_$repo.zip", fopen("https://github.com/$repo/archive/$branch.zip", 'r'));
+  file_put_contents($temp_file, fopen("https://github.com/$repo/archive/$branch.zip", 'r'));
+
+  if (!file_exists($temp_file)) {
+    show_error("Could not download $temp_file");
+  }
 
   // Extract zip
   $zip = new ZipArchive;
-  $res = $zip->open("temp_$repo.zip");
+  $res = $zip->open($temp_file);
   if ($res) {
-    $zip->extractTo('./temp_$repo');
+    $zip->extractTo("./repos");
     $zip->close();
   } else {
-    show_error("Could not extract temp_$repo.zip");
+    show_error("Could not extract $temp_file");
   }
 
+  $source = "./repos/" . basename($repo) . "-$branch";
+  $dest = $config['ROOT_DIR'] . "/$dest_dir";
+
   // Copy files
-  if (!xcopy("./temp_$repo/$src_dir", "./$dest_dir")) {
-    show_error("Failed to copy contents from ./temp_$repo/$src_dir to ./$dest_dir");
+  if (!xcopy("$source/$src_dir", $dest)) {
+    show_error("Failed to copy contents from $source/$src_dir to $dest");
   }
 
   // Cleanup
-  xrmdir("./temp_$repo");
-  unlink("./temp_$repo.zip");
+  xrmdir($source);
+  unlink($temp_file);
 
   // Return success response
   echo json_encode(array(
