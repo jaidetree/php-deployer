@@ -7,9 +7,16 @@ function xcopy ($source, $dest, $permissions = 0755)
     return copy($source, $dest);
   }
 
+  $dest_dir = dirname($dest);
+
+  // Ensure dest directory exists
+  if (!is_dir($dest_dir)) {
+    mkdir($dest_dir, $permissions, true);
+  }
+
   // Make destination directory
   if (!is_dir($dest)) {
-    mkdir($dest, $permissions);
+    mkdir($dest, $permissions, true);
   }
 
   // Loop through the folder

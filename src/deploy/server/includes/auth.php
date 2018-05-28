@@ -15,14 +15,13 @@ function auth ($body, $config) {
 
 	$hash = $body['repo'] . '|' . $body['branch'] . '|' . $body['timeout'];
 	$signature = base64_decode($body['signature']);
-
 	$dir = $config['KEY_DIR'];
 
 	foreach (scandir($dir) as $file) {
 		if (!is_file("$dir/$file")) continue;
-
-		$key = openssl_get_publickey(file_get_contents("$dir/$file"));
-		$ret = openssl_verify($hash, $signature, $key);
+    $key_contents = file_get_contents("$dir/$file");
+		$key = openssl_get_publickey($key_contents);
+		$ret = openssl_verify($hash, $signature, $key, "sha256WithRSAEncryption");
 
 		if ($ret == 1) {
 			return true;
