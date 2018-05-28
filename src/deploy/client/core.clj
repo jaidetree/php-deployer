@@ -67,7 +67,7 @@
   [body server-url]
   (client/post server-url {:form-params body
                            :content-type :json
-                           :accept :json}))
+                           :as :json}))
 
 (defn deploy!
   "Creates a deploy request and prints the body
