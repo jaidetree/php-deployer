@@ -1,6 +1,6 @@
 <?php
 
-// recursively
+// recursively remove files and directories
 function xrmdir ($dir) {
   $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
   $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
@@ -14,6 +14,7 @@ function xrmdir ($dir) {
   }
 
   rmdir($dir);
-}
 
+  return true;
+}
 ?>

@@ -12,11 +12,11 @@ function accept_deploy ($server, $request_body, $config) {
     show_error('Access denied.');
   }
 
-  $name = basename($body['name']); // like "mechtron"
-  $repo = $body['repo']; // like "aetkinz/mechtron.ca"
-  $branch = $body['branch']; // like "develop" or "stable"
-  $src_dir = $body['src_dir']; // like a "dist" folder
-  $dest_dir = $body['dest_dir']; // like a "mechtron/a" folder
+  $name = basename(trim($body['name'])); // like "mechtron"
+  $repo = trim($body['repo']); // like "aetkinz/mechtron.ca"
+  $branch = trim($body['branch']); // like "develop" or "stable"
+  $src_dir = trim($body['src_dir']); // like a "dist" folder
+  $dest_dir = trim($body['dest_dir']); // like a "mechtron/a" folder
 
   if (!$name) {
     show_error('Missing name POST param.');
