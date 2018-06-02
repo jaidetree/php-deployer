@@ -39,7 +39,7 @@ openssl rsa -in resources/deploy.secret.pem -pubout -out resources/deploy.secret
 
 You can use the [clj-deploy](https://github.com/jayzawrotny/clj-deploy) to send signed server requests to the deploy server.
 
-### Arguments
+### POST params
 
 **name**
 
@@ -139,6 +139,8 @@ The folder representing where the repo will deploy to.
 
 The following utils are available to use in the `before_deploy` and `after_deploy` hook functions.
 
+#### Recursive Copy
+
 ```php
 bool xcopy ( string $source, string $dest [, int $permissions = 0755 ] );
 ```
@@ -157,6 +159,7 @@ Destination directory to recursively copy files into.
 
 Ocal integer of the permissions [mode](http://us3.php.net/manual/en/function.chmod.php) to apply to each file copied. Defaults to `0755`.
 
+#### Recursive Delete
 
 ```php
 bool xrmdir ( string $dir );
