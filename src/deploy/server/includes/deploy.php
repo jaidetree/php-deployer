@@ -17,6 +17,14 @@ function accept_deploy ($server, $request_body, $config) {
   $src_dir = $body['src_dir']; // like a "dist" folder
   $dest_dir = $body['dest_dir']; // like a "mechtron/a" folder
 
+  if (!$src_dir) {
+    show_error('Missing src_dir POST param.');
+  }
+
+  if (!$dest_dir) {
+    show_error('Missing dest_dir POST param.');
+  }
+
   if ($src_dir[0] == "." || $src_dir[0] == "/") {
     show_error('Received a source directory outside the dev sandbox.');
   }
