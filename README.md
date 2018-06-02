@@ -159,6 +159,8 @@ Destination directory to recursively copy files into.
 
 Ocal integer of the permissions [mode](http://us3.php.net/manual/en/function.chmod.php) to apply to each file copied. Defaults to `0755`.
 
+---
+
 #### Recursive Delete
 
 ```php
